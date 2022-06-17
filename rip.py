@@ -26,7 +26,7 @@ for x in f:
 
         raw = json.loads(response.text)["data"]
         if len(raw) > 1:
-            print("multiple!")
+            print("-----------multiple!-----------")
             continue
         obj = raw[0]
 
@@ -43,7 +43,7 @@ for x in f:
         if obj["tcgplayer"]["prices"].get("holofoil") is not None:
           holoFoilPrice = obj["tcgplayer"]["prices"]["holofoil"]["market"]
 
-        csvVal = "{num},{printTotal},{natNumber},{name},{type},{normalPrice},{reverseHoloFoilPrice},{holoFoilPrice},{priceUpdated}\n".format(num=line.split("/")[0], printTotal=line.split("/")[1], natNumber=obj["nationalPokedexNumbers"][0], name=obj["name"], type=obj["types"][0], normalPrice=normalPrice, reverseHoloFoilPrice=reverseHoloFoilPrice, holoFoilPrice=holoFoilPrice, priceUpdated=obj["tcgplayer"]["updatedAt"])
+        csvVal = "{num},{printTotal},{natNumber},{name},{type},{setName},{normalPrice},{reverseHoloFoilPrice},{holoFoilPrice},{priceUpdated}\n".format(num=line.split("/")[0], printTotal=line.split("/")[1], natNumber=obj["nationalPokedexNumbers"][0], name=obj["name"], type=obj["types"][0], setName=obj["set"]["name"], normalPrice=normalPrice, reverseHoloFoilPrice=reverseHoloFoilPrice, holoFoilPrice=holoFoilPrice, priceUpdated=obj["tcgplayer"]["updatedAt"])
 
         if logOnly:
             print(csvVal)
@@ -52,11 +52,14 @@ for x in f:
             file1.write(csvVal)
             file1.close()
     except:
-        print("Failed!")
+        print("-----------Failed!-----------")
         csvVal = "{num},{printTotal},???,???,???,???,???,???,???\n".format(num=line.split("/")[0], printTotal=line.split("/")[1])
 
-        file1 = open("pokemon.csv", "a")  # append mode
-        file1.write(csvVal)
-        file1.close()
+        if logOnly:
+            print("")
+        else:
+            file1 = open("pokemon.csv", "a")  # append mode
+            file1.write(csvVal)
+            file1.close()
 
     time.sleep(2)
